@@ -60,6 +60,7 @@ module.exports = {
           },
         },
       ],
+      "expo-web-browser",
     ],
     extra: {
       eas: {
