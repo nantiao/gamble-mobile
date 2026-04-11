@@ -1,9 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { initializeApp } from 'firebase/app';
-import { getReactNativePersistence, initializeAuth } from 'firebase/auth/react-native';
-import { doc, getDocFromServer, getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-import firebaseConfig from '../firebase-applet-config.json';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { initializeApp } from "firebase/app";
+import { getReactNativePersistence, initializeAuth } from "firebase/auth";
+import { doc, getDocFromServer, getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import firebaseConfig from "../firebase-applet-config.json";
 
 const app = initializeApp(firebaseConfig);
 export const auth = initializeAuth(app, {
@@ -14,23 +14,28 @@ export const storage = getStorage(app);
 
 async function testConnection() {
   try {
-    await getDocFromServer(doc(db, '_internal_', 'connection_test'));
-    console.log('Firebase connection successful');
+    await getDocFromServer(doc(db, "_internal_", "connection_test"));
+    console.log("Firebase connection successful");
   } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error('Please check your Firebase configuration. The client is offline.');
+    if (
+      error instanceof Error &&
+      error.message.includes("the client is offline")
+    ) {
+      console.error(
+        "Please check your Firebase configuration. The client is offline.",
+      );
     }
   }
 }
 testConnection();
 
 export enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
+  CREATE = "create",
+  UPDATE = "update",
+  DELETE = "delete",
+  LIST = "list",
+  GET = "get",
+  WRITE = "write",
 }
 
 export interface FirestoreErrorInfo {
@@ -52,7 +57,11 @@ export interface FirestoreErrorInfo {
   };
 }
 
-export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+export function handleFirestoreError(
+  error: unknown,
+  operationType: OperationType,
+  path: string | null,
+) {
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
     authInfo: {
@@ -72,6 +81,6 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
     operationType,
     path,
   };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  console.error("Firestore Error: ", JSON.stringify(errInfo));
   throw new Error(JSON.stringify(errInfo));
 }
